@@ -1,0 +1,266 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointments - City Care Hospital</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <h2>City Care Hospital</h2>
+
+        <nav>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/patients">Patients</a>
+            <a href="/doctors">Doctors</a>
+            <a href="/appointments" class="active">Appointments</a>
+            <a href="/billing">Billing</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <h1>Appointment Management</h1>
+
+        <!-- CHECK AVAILABILITY -->
+        <div class="form-container">
+            <h2>Find Available Doctors</h2>
+
+            <form action="/check_availability" method="POST" id="availabilityForm">
+
+                <div class="form-group">
+                    <label for="date">Appointment Date</label>
+
+                    <input
+                        type="date"
+                        id="date"
+                        name="date"
+                        value="{{ selected_date or '' }}"
+                        min="{{ today }}"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="time">Appointment Time</label>
+
+                    <input
+                        type="time"
+                        id="time"
+                        name="time"
+                        value="{{ selected_time or '' }}"
+                        required
+                    >
+                </div>
+
+                <button type="submit">Check Available Doctors</button>
+
+            </form>
+        </div>
+
+        <!-- BOOK APPOINTMENT -->
+        <div class="form-container">
+            <h2>Book Appointment</h2>
+
+            <form action="/add_appointment" method="POST" id="appointmentForm">
+
+                <!-- PATIENT -->
+                <div class="form-group">
+                    <label for="patient">Patient</label>
+
+                    <select id="patient" name="patient" required>
+                        <option value="">Select Patient</option>
+
+                        {% for patient in patients %}
+                        <option value="{{ patient.name }}">
+                            Id-{{ 99 + patient.id }} | {{ patient.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- DOCTOR -->
+                <div class="form-group">
+                    <label for="doctor">Available Doctor</label>
+
+                    <select id="doctor" name="doctor" required>
+                        <option value="">Select Available Doctor</option>
+
+                        {% for doctor in doctors %}
+                        <option
+                            value="{{ doctor.name }}"
+                            data-doctor-id="{{ doctor.id }}"
+                        >
+                            {{ doctor.name }} - {{ doctor.specialization }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- DOCTOR ID -->
+                <input type="hidden" id="doctor_id" name="doctor_id">
+
+                <!-- DATE -->
+                <div class="form-group">
+                    <label for="appointment_date">Date</label>
+
+                    <input
+                        type="date"
+                        id="appointment_date"
+                        name="date"
+                        value="{{ selected_date or '' }}"
+                        min="{{ today }}"
+                        readonly
+                        required
+                    >
+                </div>
+
+                <!-- TIME -->
+                <div class="form-group">
+                    <label for="appointment_time">Time</label>
+
+                    <input
+                        type="time"
+                        id="appointment_time"
+                        name="time"
+                        value="{{ selected_time or '' }}"
+                        readonly
+                        required
+                    >
+                </div>
+
+                <button
+                    type="submit"
+                    id="bookButton"
+                    {% if not selected_date or not selected_time or not availability_checked %}
+                    disabled
+                    {% endif %}
+                >
+                    Book Appointment
+                </button>
+
+                {% if availability_checked and not doctors %}
+                <p>No doctors are available for this date and time.</p>
+                {% elif not availability_checked %}
+                <p>Please check availability before booking.</p>
+                {% endif %}
+
+            </form>
+        </div>
+
+        <!-- APPOINTMENT RECORDS -->
+        <div class="table-container">
+            <h2>Appointment Records</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Patient</th>
+                        <th>Doctor</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for appointment in appointments %}
+                    <tr>
+                        <td>{{ appointment.patient }}</td>
+                        <td>{{ appointment.doctor }}</td>
+                        <td>{{ appointment.date }}</td>
+                        <td>{{ appointment.time }}</td>
+                        <td>{{ appointment.status }}</td>
+                        <td>
+                            <a
+                                href="/delete_appointment/{{ appointment.id }}"
+                                onclick="return confirm('Delete this appointment?');"
+                            >
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" style="text-align:center;">
+                            No appointments yet.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+</div>
+
+<script>
+    const doctorSelect = document.getElementById("doctor");
+    const doctorIdInput = document.getElementById("doctor_id");
+    const appointmentDate = document.getElementById("appointment_date");
+    const appointmentTime = document.getElementById("appointment_time");
+    const bookButton = document.getElementById("bookButton");
+    const availabilityForm = document.getElementById("availabilityForm");
+
+    // Store the selected doctor's ID.
+    function updateDoctorId() {
+        const selectedOption =
+            doctorSelect.options[doctorSelect.selectedIndex];
+
+        doctorIdInput.value =
+            selectedOption.dataset.doctorId || "";
+
+        updateBookingButton();
+    }
+
+    // Enable booking only when the required selections exist.
+    function updateBookingButton() {
+        bookButton.disabled = !(
+            doctorSelect.value &&
+            doctorIdInput.value &&
+            appointmentDate.value &&
+            appointmentTime.value
+        );
+    }
+
+    doctorSelect.addEventListener("change", updateDoctorId);
+
+    // Keep the booking date and time linked to the availability search.
+    availabilityForm.addEventListener("submit", function (event) {
+        if (!availabilityForm.reportValidity()) {
+            event.preventDefault();
+        }
+    });
+
+    document.getElementById("appointmentForm").addEventListener(
+        "submit",
+        function (event) {
+            if (
+                !doctorIdInput.value ||
+                !appointmentDate.value ||
+                !appointmentTime.value
+            ) {
+                event.preventDefault();
+                alert("Please check availability and select a doctor first.");
+            }
+        }
+    );
+
+    updateDoctorId();
+</script>
+
+</body>
+</html>

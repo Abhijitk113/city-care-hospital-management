@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Billing - City Care Hospital</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <h2>City Care Hospital</h2>
+
+        <nav>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/patients">Patients</a>
+            <a href="/doctors">Doctors</a>
+            <a href="/appointments">Appointments</a>
+            <a href="/billing" class="active">Billing</a>
+            <a href="/logout">Logout</a>
+        </nav>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <h1>Billing Management</h1>
+
+        <!-- CREATE BILL -->
+        <div class="form-container">
+
+            <h2>Create New Bill</h2>
+
+            <form action="/add_bill" method="POST">
+
+                <!-- PATIENT -->
+                <div class="form-group">
+
+                    <label for="patient">Patient</label>
+
+                    <select id="patient" name="patient" required>
+                        <option value="">Select Patient</option>
+
+                        {% for patient in patients %}
+                        <option value="{{ patient.name }}">
+                            Id-{{ 99 + patient.id }} | {{ patient.name }}
+                        </option>
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+                <!-- CONSULTATION FEE -->
+                <div class="form-group">
+
+                    <label for="consultation_fee">Consultation Fee (₹)</label>
+
+                    <input
+                        type="number"
+                        id="consultation_fee"
+                        name="consultation_fee"
+                        min="0"
+                        step="0.01"
+                        value="0"
+                        placeholder="Enter consultation fee"
+                        required
+                    >
+
+                </div>
+
+                <!-- MEDICINE CHARGES -->
+                <div class="form-group">
+
+                    <label for="medicine_charges">Medicine Charges (₹)</label>
+
+                    <input
+                        type="number"
+                        id="medicine_charges"
+                        name="medicine_charges"
+                        min="0"
+                        step="0.01"
+                        value="0"
+                        placeholder="Enter medicine charges"
+                        required
+                    >
+
+                </div>
+
+                <!-- OTHER CHARGES -->
+                <div class="form-group">
+
+                    <label for="other_charges">Other Charges (₹)</label>
+
+                    <input
+                        type="number"
+                        id="other_charges"
+                        name="other_charges"
+                        min="0"
+                        step="0.01"
+                        value="0"
+                        placeholder="Enter other charges"
+                        required
+                    >
+
+                </div>
+
+                <!-- PAYMENT STATUS -->
+                <div class="form-group">
+
+                    <label for="status">Payment Status</label>
+
+                    <select id="status" name="status" required>
+                        <option value="Pending" selected>Pending</option>
+                        <option value="Overdue">Overdue</option>
+                        <option value="Paid">Paid</option>
+                    </select>
+
+                </div>
+
+                <button type="submit">Create Bill</button>
+
+            </form>
+
+            <p style="margin-top: 12px; color: #666;">
+                The bill issue date will be set automatically to today's date.
+            </p>
+
+        </div>
+
+        <!-- BILL RECORDS -->
+        <div class="table-container">
+
+            <h2>Billing Records</h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Patient</th>
+                        <th>Issue Date</th>
+                        <th>Consultation</th>
+                        <th>Medicine</th>
+                        <th>Other</th>
+                        <th>Total</th>
+                        <th>Payment Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for bill in bills %}
+
+                    <tr>
+
+                        <td>{{ bill.patient }}</td>
+
+                        <td>
+                            {{ bill.issue_date or 'Not available' }}
+                        </td>
+
+                        <td>
+                            ₹{{ "%.2f"|format(bill.consultation_fee or 0) }}
+                        </td>
+
+                        <td>
+                            ₹{{ "%.2f"|format(bill.medicine_charges or 0) }}
+                        </td>
+
+                        <td>
+                            ₹{{ "%.2f"|format(bill.other_charges or 0) }}
+                        </td>
+
+                        <td>
+                            <strong>
+                                ₹{{ "%.2f"|format(bill.total or 0) }}
+                            </strong>
+                        </td>
+
+                        <!-- UPDATE PAYMENT STATUS -->
+                        <td>
+
+                            <form
+                                action="/update_bill_status/{{ bill.id }}"
+                                method="POST"
+                                style="margin: 0;"
+                            >
+
+                                <select name="status" required>
+
+                                    <option value="Pending"
+                                        {% if bill.status == 'Pending' %}selected{% endif %}>
+                                        Pending
+                                    </option>
+
+                                    <option value="Overdue"
+                                        {% if bill.status == 'Overdue' %}selected{% endif %}>
+                                        Overdue
+                                    </option>
+
+                                    <option value="Paid"
+                                        {% if bill.status == 'Paid' %}selected{% endif %}>
+                                        Paid
+                                    </option>
+
+                                </select>
+
+                                <button type="submit" style="margin-top: 6px;">
+                                    Update Status
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                        <!-- DELETE BILL -->
+                        <td>
+
+                            <a
+                                href="/delete_bill/{{ bill.id }}"
+                                onclick="return confirm('Are you sure you want to delete this bill?');"
+                            >
+                                Delete
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+                        <td colspan="8" style="text-align: center;">
+                            No billing records yet.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,608 @@
+/* =========================
+   GENERAL
+========================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #eef4f8;
+    background-image: url("/static/hospital%20management.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: #263746;
+
+}
+
+
+/* =========================
+   LAYOUT
+========================= */
+
+.dashboard-container {
+    min-height: 100vh;
+    display: flex;
+}
+
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar {
+    width: 220px;
+    min-height: 100vh;
+    background: #155d86;
+    color: white;
+    padding: 25px 15px;
+    position: fixed;
+    left: 0;
+    top: 0;
+}
+
+.sidebar h2 {
+    text-align: center;
+    font-size: 19px;
+    margin-bottom: 35px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.25);
+}
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sidebar nav a {
+    text-decoration: none;
+    color: white;
+    padding: 13px 15px;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.sidebar nav a:hover {
+    background: rgba(255,255,255,0.15);
+}
+
+.sidebar nav a.active {
+    background: white;
+    color: #155d86;
+    font-weight: bold;
+}
+
+
+/* =========================
+   MAIN AREA
+========================= */
+
+.main-content {
+    margin-left: 220px;
+    width: calc(100% - 220px);
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 40px 30px;
+}
+
+
+/* =========================
+   PAGE TITLE
+========================= */
+
+.main-content > h1 {
+    width: 850px;
+    max-width: 100%;
+
+    text-align: center;
+    color: #164b6b;
+    font-size: 30px;
+    margin-bottom: 25px;
+}
+
+.main-content > h1::after {
+    content: "";
+    display: block;
+
+    width: 55px;
+    height: 3px;
+
+    background: #20a36a;
+
+    margin: 10px auto 0;
+}
+
+
+/* =========================
+   FORM CARD
+========================= */
+
+.form-container {
+    width: 650px;
+    max-width: 100%;
+
+    background: white;
+
+    padding: 30px;
+
+    border-radius: 14px;
+
+    border: 1px solid #dce6ed;
+
+    box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+
+    margin-bottom: 30px;
+}
+
+.form-container h2 {
+    text-align: center;
+
+    color: #164b6b;
+
+    font-size: 21px;
+
+    margin-bottom: 25px;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.form-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 14px;
+
+    font-weight: 600;
+
+    margin-bottom: 7px;
+
+    color: #34495e;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+
+    padding: 12px 14px;
+
+    border: 1px solid #ccd8e0;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    outline: none;
+
+    background: #fbfdff;
+
+    transition: 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #1684bd;
+
+    box-shadow: 0 0 0 3px rgba(22,132,189,0.10);
+
+    background: white;
+}
+
+
+/* =========================
+   BUTTON
+========================= */
+
+.form-container button {
+    width: 100%;
+
+    padding: 13px;
+
+    margin-top: 5px;
+
+    background: #1684bd;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.form-container button:hover {
+    background: #116d9d;
+}
+
+
+/* =========================
+   TABLE CARD
+========================= */
+
+.table-container {
+    width: 900px;
+    max-width: 100%;
+
+    background: white;
+
+    padding: 30px;
+
+    border-radius: 14px;
+
+    border: 1px solid #dce6ed;
+
+    box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+
+    overflow-x: auto;
+}
+
+.table-container h2 {
+    text-align: center;
+
+    color: #164b6b;
+
+    font-size: 21px;
+
+    margin-bottom: 22px;
+}
+
+
+/* =========================
+   TABLE
+========================= */
+
+table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 650px;
+}
+
+thead {
+    background: #edf5f9;
+}
+
+th {
+    padding: 14px;
+
+    text-align: left;
+
+    font-size: 13px;
+
+    color: #496273;
+
+    border-bottom: 2px solid #d9e4eb;
+}
+
+td {
+    padding: 14px;
+
+    font-size: 14px;
+
+    border-bottom: 1px solid #e8eef2;
+}
+
+tbody tr:hover {
+    background: #f8fbfd;
+}
+
+
+/* =========================
+   DELETE
+========================= */
+
+td a {
+    color: #dc3545;
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: bold;
+}
+
+td a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================
+   DASHBOARD
+========================= */
+
+.dashboard-cards {
+    width: 900px;
+    max-width: 100%;
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 20px;
+}
+
+.dashboard-card {
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 14px;
+
+    border: 1px solid #dce6ed;
+
+    box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+
+    text-align: center;
+}
+
+.dashboard-card h3 {
+    color: #687b89;
+
+    font-size: 14px;
+
+    margin-bottom: 10px;
+}
+
+.dashboard-card p {
+    color: #164b6b;
+
+    font-size: 30px;
+
+    font-weight: bold;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    .sidebar {
+        position: relative;
+
+        width: 100%;
+
+        min-height: auto;
+    }
+
+    .dashboard-container {
+        display: block;
+    }
+
+    .main-content {
+        margin-left: 0;
+
+        width: 100%;
+
+        padding: 25px 15px;
+    }
+
+    .dashboard-cards {
+        grid-template-columns: 1fr;
+    }
+}
+    /* =========================
+   LOGIN PAGE
+========================= */
+
+.login-page {
+    min-height: 100vh;
+
+    background-image: url("/static/hospital%20management.jpeg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* Background overlay */
+
+.login-overlay {
+    width: 100%;
+    min-height: 100vh;
+
+    background: rgba(0, 35, 55, 0.42);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+}
+
+
+/* Login box */
+
+.login-box {
+    width: 420px;
+    max-width: 100%;
+
+    background: rgba(255, 255, 255, 0.97);
+
+    padding: 38px;
+
+    border-radius: 14px;
+
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+
+    text-align: center;
+}
+
+
+/* Hospital name */
+
+.login-box h1 {
+    color: #164b6b;
+
+    font-size: 27px;
+
+    margin-bottom: 8px;
+}
+
+
+/* Subtitle */
+
+.login-subtitle {
+    color: #71808c;
+
+    font-size: 14px;
+
+    margin-bottom: 30px;
+}
+
+
+/* Login form */
+
+.login-box form {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+}
+
+
+/* Username and password rows */
+
+.login-field {
+    display: flex;
+
+    align-items: center;
+
+    width: 100%;
+
+    gap: 10px;
+}
+
+
+/* Labels */
+
+.login-field label {
+    width: 95px;
+
+    text-align: left;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #34495e;
+
+    white-space: nowrap;
+}
+
+
+/* Input boxes */
+
+.login-field input {
+    flex: 1;
+
+    padding: 12px 13px;
+
+    border: 1px solid #ccd8e0;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    outline: none;
+
+    background: #fbfdff;
+}
+
+
+.login-field input:focus {
+    border-color: #1684bd;
+
+    box-shadow: 0 0 0 3px rgba(22, 132, 189, 0.10);
+
+    background: white;
+}
+
+
+/* Login button */
+
+.login-box button {
+    width: 100%;
+
+    padding: 13px;
+
+    margin-top: 5px;
+
+    background: #1684bd;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.login-box button:hover {
+    background: #116d9d;
+}
+
+
+/* Mobile */
+
+@media (max-width: 500px) {
+
+    .login-box {
+        padding: 28px 22px;
+    }
+
+    .login-field {
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 6px;
+    }
+
+    .login-field label {
+        width: auto;
+    }
+}

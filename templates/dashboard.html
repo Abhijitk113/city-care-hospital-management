@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - Hospital Management</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <h2>City Care Hospital</h2>
+
+        <nav>
+
+            <a href="/dashboard" class="active">
+                Dashboard
+            </a>
+
+            <a href="/patients">
+                Patients
+            </a>
+
+            <a href="/doctors">
+                Doctors
+            </a>
+
+            <a href="/appointments">
+                Appointments
+            </a>
+
+            <a href="/billing">
+                Billing
+            </a>
+
+            <a href="/logout">
+                Logout
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <h1>Hospital Dashboard</h1>
+
+
+        <!-- SUMMARY CARDS -->
+
+        <div class="dashboard-cards">
+
+            <div class="dashboard-card">
+
+                <h3>Total Patients</h3>
+
+                <p>{{ patients }}</p>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <h3>Total Doctors</h3>
+
+                <p>{{ doctors }}</p>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <h3>Total Appointments</h3>
+
+                <p>{{ appointments }}</p>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <h3>Total Billing</h3>
+
+                <p>₹{{ bills }}</p>
+
+            </div>
+
+        </div>
+
+
+        <!-- QUICK ACTIONS -->
+
+        <div class="form-container" style="margin-top: 30px;">
+
+            <h2>Quick Actions</h2>
+
+            <div style="
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            ">
+
+                <a href="/patients"
+                   style="
+                   text-decoration: none;
+                   background: #1684bd;
+                   color: white;
+                   padding: 12px;
+                   border-radius: 8px;
+                   text-align: center;
+                   ">
+                    Manage Patients
+                </a>
+
+                <a href="/doctors"
+                   style="
+                   text-decoration: none;
+                   background: #1684bd;
+                   color: white;
+                   padding: 12px;
+                   border-radius: 8px;
+                   text-align: center;
+                   ">
+                    Manage Doctors
+                </a>
+
+                <a href="/appointments"
+                   style="
+                   text-decoration: none;
+                   background: #1684bd;
+                   color: white;
+                   padding: 12px;
+                   border-radius: 8px;
+                   text-align: center;
+                   ">
+                    Manage Appointments
+                </a>
+
+                <a href="/billing"
+                   style="
+                   text-decoration: none;
+                   background: #1684bd;
+                   color: white;
+                   padding: 12px;
+                   border-radius: 8px;
+                   text-align: center;
+                   ">
+                    Manage Billing
+                </a>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - City Care Hospital</title>
+
+    <!-- Cache-busting so Chrome loads the latest CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}?v=2">
+</head>
+
+<body class="login-page">
+
+    <div class="login-overlay">
+
+        <div class="login-box">
+
+            <h1>City Care Hospital</h1>
+
+            <p class="login-subtitle">
+                Hospital Management System
+            </p>
+
+            <form action="/login" method="POST">
+
+                <div class="login-field">
+
+                    <label for="username">Username :</label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Enter username"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="login-field">
+
+                    <label for="password">Password :</label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter password"
+                        required
+                    >
+
+                </div>
+
+
+                <button type="submit">
+                    Login
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
